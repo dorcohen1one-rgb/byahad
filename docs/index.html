@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>ביחד</title>
 <meta property="og:title" content="📍 ביחד – הזמנה לשיתוף מיקום">
-<meta property="og:description" content="לחץ, התקן, ואתם רואים אחד את השני על המפה">
+<meta property="og:description" content="לוחצים, מתקינים, ורואים אחד את השני על המפה">
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--tx:#101828;--mu:#667085;--ac:#2f6bff;--ok:#12a150;--bd:#e4e7ec}
 @media (prefers-color-scheme:dark){:root{--bg:#0d1117;--card:#161b22;--tx:#e6edf3;--mu:#8b949e;--bd:#30363d}}
@@ -22,7 +22,12 @@ h2{font-size:18px;margin:0 0 10px;display:flex;align-items:center}
 .btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font:700 18px system-ui,sans-serif;background:var(--ac);color:#fff;text-align:center;text-decoration:none;cursor:pointer}
 .btn.ok{background:var(--ok)}
 small,.mu{color:var(--mu);font-size:14px}
-ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
+ul{margin:8px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
+li{margin-bottom:6px}
+details{margin-top:12px;border-top:1px solid var(--bd);padding-top:10px}
+summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:15px}
+.skip{text-align:center;margin:0}.skip a{color:var(--ac);font-weight:600;text-decoration:none}
+#step2.flash{animation:fl 1.2s}@keyframes fl{0%,60%{box-shadow:0 0 0 4px var(--ok)}}
 .done{color:var(--ok);font-weight:700;text-align:center;margin-top:8px;min-height:1.5em}
 .hidden{display:none}
 </style>
@@ -31,21 +36,27 @@ ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
 <main>
   <div class="hero"><div class="logo">📍</div><h1>ביחד</h1><p id="sub">רואים אחד את השני על המפה, בזמן אמת</p></div>
 
+  <p class="mu skip" id="skip"><a href="#" id="skipA">כבר מותקן אצלך? ישר לשלב 2 ⬇️</a></p>
+
   <div class="card">
     <h2><span class="n">1</span>מורידים ומתקינים</h2>
-    <a class="btn" id="dl" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">⬇️ הורד את האפליקציה</a>
-    <ul>
-      <li>אם כתוב שהקובץ עלול להזיק: <b>הורד בכל זאת</b></li>
-      <li>פותחים את הקובץ שירד ← <b>התקן</b> (אם שואל: לאשר התקנה ממקור זה)</li>
-      <li>לא מוצא את הקובץ? אפליקציית <b>הקבצים שלי</b> ← <b>הורדות</b> ← Together.apk</li>
-      <li>בסמסונג, אם ההתקנה נחסמת: הגדרות ← אבטחה ופרטיות ← Auto Blocker ← לכבות זמנית</li>
-    </ul>
+    <a class="btn" id="dl" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">⬇️ הורדת האפליקציה</a>
+    <p class="mu" style="margin:10px 0 0">כשההורדה מסתיימת: פותחים את הקובץ ← <b>התקנה</b></p>
+    <details>
+      <summary>ההתקנה נתקעה?</summary>
+      <ul>
+        <li>כתוב שהקובץ עלול להזיק? זו אפליקציה פרטית שלא נמצאת בחנות. לוחצים <b>הורדה בכל זאת</b></li>
+        <li>שואל על התקנה ממקור לא מוכר? <b>הגדרות</b> ← לאשר את הדפדפן ← חוזרים אחורה ← <b>התקנה</b></li>
+        <li>לא מוצאים את הקובץ? אפליקציית <b>הקבצים שלי</b> ← <b>הורדות</b> ← Together.apk</li>
+        <li>בסמסונג ההתקנה חסומה? הגדרות ← אבטחה ופרטיות ← <b>Auto Blocker</b> ← לכבות, להתקין, ואפשר להדליק שוב אחרי</li>
+      </ul>
+    </details>
   </div>
 
   <div class="card" id="step2">
-    <h2><span class="n">2</span>חוזרים לפה ומתחברים</h2>
-    <a class="btn ok" id="open" href="#">✅ התקנתי, פתח והתחבר</a>
-    <p class="mu" style="margin:10px 0 0">באפליקציה: כותבים שם, מאשרים מיקום והתראות, וזהו. ההזמנה כבר בפנים.</p>
+    <h2><span class="n">2</span>פותחים ומתחברים</h2>
+    <a class="btn ok" id="open" href="#">✅ פתיחת ביחד והתחברות</a>
+    <p class="mu" style="margin:10px 0 0">באפליקציה: שם, אישור מיקום והתראות, וזהו. ההזמנה כבר בפנים.</p>
   </div>
 
   <p class="done" id="msg"></p>
@@ -81,29 +92,38 @@ function showInviter(code) {
   var msg = document.getElementById('msg');
   if (!code) {
     document.getElementById('step2').classList.add('hidden');
-    document.getElementById('sub').textContent = 'אחרי ההתקנה, פתחו את קישור ההזמנה שקיבלתם';
+    document.getElementById('skip').classList.add('hidden');
+    document.getElementById('sub').textContent = 'אחרי ההתקנה, פותחים שוב את קישור ההזמנה שקיבלת';
     return;
   }
   document.getElementById('sub').textContent = 'קיבלת הזמנה! שני צעדים ואתם מחוברים';
   showInviter(code);
+  // the app picks the invite up from the clipboard if the direct hand-off fails; returns whether that worked
   function copy() {
-    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
+    var ok = false;
     try {
-      var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t);
-      t.select(); document.execCommand('copy'); t.remove();
+      var t = document.createElement('textarea'); t.value = code; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); ok = document.execCommand('copy'); t.remove();
     } catch (e) {}
+    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
+    return ok;
   }
   document.getElementById('dl').addEventListener('click', function () {
     copy();
-    msg.textContent = '⬇️ ההורדה התחילה. אחרי ההתקנה חזור לכאן ולחץ על הכפתור הירוק';
+    msg.textContent = '⬇️ ההורדה נפתחת. אחרי ההתקנה חוזרים לכאן לכפתור הירוק';
   });
   var open = document.getElementById('open');
   var back = location.origin + location.pathname + '?missing=1#' + code;
   open.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
-  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ לא הצלחתי לפתוח את האפליקציה. אם עוד לא התקנת: קודם שלב 1. אם כבר התקנת: פשוט פתח את "ביחד" מהמסך הראשי, ההזמנה כבר הועתקה ותיקלט לבד';
+  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ האפליקציה לא נפתחה. אם עוד לא הותקנה: קודם שלב 1. אם כבר מותקנת: פותחים את "ביחד" מהמסך הראשי' + (copy() ? ', וההזמנה תיקלט לבד' : ' ומדביקים שם את הקישור הזה');
   open.addEventListener('click', function () {
-    copy();
-    msg.textContent = 'אם האפליקציה לא נפתחה, פתח את "ביחד" בעצמך. ההזמנה תיקלט לבד';
+    var ok = copy();
+    msg.textContent = ok ? '✅ ההזמנה הועתקה. אם האפליקציה לא נפתחה, פותחים את "ביחד" והיא תיקלט לבד' : 'אם האפליקציה לא נפתחה: פותחים את "ביחד" ומדביקים שם את הקישור הזה';
+  });
+  document.getElementById('skipA').addEventListener('click', function (e) {
+    e.preventDefault();
+    var s2 = document.getElementById('step2');
+    s2.scrollIntoView({behavior: 'smooth', block: 'center'}); s2.classList.remove('flash'); void s2.offsetWidth; s2.classList.add('flash');
   });
 })();
 </script>
