@@ -51,6 +51,28 @@ ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
 </main>
 <script>
 window.addEventListener('hashchange', function () { location.reload(); });
+// "<name> מזמין אותך": reads the room's encrypted profiles and decrypts them here; nothing leaves the browser
+function showInviter(code) {
+  try {
+    var b = code.slice(7).replace(/-/g, '+').replace(/_/g, '/');
+    var j = JSON.parse(atob(b + '==='.slice((b.length + 3) % 4)));
+    if (!/^https:\/\/[a-z0-9-]+\.(firebaseio\.com|[a-z0-9-]+\.firebasedatabase\.app)$/.test(j.u) || !/^[A-Za-z0-9_-]{20,}$/.test(j.r)) return;
+    var raw = function (s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); var d = atob(s + '==='.slice((s.length + 3) % 4)), u = new Uint8Array(d.length); for (var i = 0; i < d.length; i++) u[i] = d.charCodeAt(i); return u; };
+    crypto.subtle.importKey('raw', raw(j.k), 'AES-GCM', false, ['decrypt']).then(function (key) {
+      return fetch(j.u + '/rooms/' + j.r + '/now/members.json').then(function (r) { return r.json(); }).then(function (ms) {
+        return Promise.all(Object.keys(ms || {}).map(function (id) {
+          var v = raw(ms[id]);
+          return crypto.subtle.decrypt({name: 'AES-GCM', iv: v.slice(0, 12)}, key, v.slice(12))
+            .then(function (pt) { return JSON.parse(new TextDecoder().decode(pt)); }, function () { return null; });
+        }));
+      });
+    }).then(function (ps) {
+      var names = ps.filter(function (p) { return p && p.n; }).map(function (p) { return (p.em || '') + ' ' + p.n; });
+      if (!names.length) return;
+      document.getElementById('sub').textContent = '📨 הזמנה מ' + names.join(' ו') + '! שני צעדים ואתם מחוברים';
+    }).catch(function () {});
+  } catch (e) {}
+}
 (function () {
   var m = /BYAHAD-[A-Za-z0-9_-]+/.exec(decodeURIComponent(location.hash || ''));
   var code = m ? m[0] : '';
@@ -61,9 +83,9 @@ window.addEventListener('hashchange', function () { location.reload(); });
     return;
   }
   document.getElementById('sub').textContent = 'קיבלת הזמנה! שני צעדים ואתם מחוברים';
+  showInviter(code);
   function copy() {
-    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catchwindow.addEventListener('hashchange', function () { location.reload(); });
-(function () {}); } catch (e) {}
+    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
     try {
       var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t);
       t.select(); document.execCommand('copy'); t.remove();
