@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>ביחד</title>
+<meta property="og:title" content="📍 ביחד – הזמנה לשיתוף מיקום">
+<meta property="og:description" content="לחץ, התקן, ואתם רואים אחד את השני על המפה">
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#101828;--mu:#667085;--ac:#2f6bff;--ok:#12a150;--bd:#e4e7ec}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--card:#161b22;--tx:#e6edf3;--mu:#8b949e;--bd:#30363d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+main{max-width:460px;margin:0 auto;padding:28px 16px 40px}
+.hero{text-align:center;margin-bottom:18px}.logo{font-size:56px}h1{margin:4px 0 2px;font-size:30px}
+.hero p{margin:0;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px;margin:14px 0}
+.n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;margin-left:8px}
+h2{font-size:18px;margin:0 0 10px;display:flex;align-items:center}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font:700 18px system-ui,sans-serif;background:var(--ac);color:#fff;text-align:center;text-decoration:none;cursor:pointer}
+.btn.ok{background:var(--ok)}
+small,.mu{color:var(--mu);font-size:14px}
+ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
+.done{color:var(--ok);font-weight:700;text-align:center;margin-top:8px;min-height:1.5em}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero"><div class="logo">📍</div><h1>ביחד</h1><p id="sub">רואים אחד את השני על המפה, בזמן אמת</p></div>
+
+  <div class="card">
+    <h2><span class="n">1</span>מורידים ומתקינים</h2>
+    <a class="btn" id="dl" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">⬇️ הורד את האפליקציה</a>
+    <ul>
+      <li>אם כתוב שהקובץ עלול להזיק: <b>הורד בכל זאת</b></li>
+      <li>פותחים את הקובץ שירד ← <b>התקן</b> (אם שואל: לאשר התקנה ממקור זה)</li>
+      <li>בסמסונג, אם ההתקנה נחסמת: הגדרות ← אבטחה ופרטיות ← Auto Blocker ← לכבות זמנית</li>
+    </ul>
+  </div>
+
+  <div class="card" id="step2">
+    <h2><span class="n">2</span>חוזרים לפה ומתחברים</h2>
+    <a class="btn ok" id="open" href="#">✅ התקנתי, פתח והתחבר</a>
+    <p class="mu" style="margin:10px 0 0">באפליקציה: כותבים שם, מאשרים מיקום והתראות, וזהו. ההזמנה כבר בפנים.</p>
+  </div>
+
+  <p class="done" id="msg"></p>
+  <p class="mu" style="text-align:center">🔐 המיקום מוצפן מקצה לקצה. רק מי שקיבל את הקישור הזה רואה אתכם.<br>כשהשיתוף פעיל יש התראה קבועה בטלפון, ואפשר להשהות בכל רגע.</p>
+</main>
+<script>
+(function () {
+  var m = /BYAHAD-[A-Za-z0-9_-]+/.exec(decodeURIComponent(location.hash || ''));
+  var code = m ? m[0] : '';
+  var msg = document.getElementById('msg');
+  if (!code) {
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('sub').textContent = 'אחרי ההתקנה, פתחו את קישור ההזמנה שקיבלתם';
+    return;
+  }
+  document.getElementById('sub').textContent = 'קיבלת הזמנה! שני צעדים ואתם מחוברים';
+  function copy() {
+    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
+    try {
+      var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t);
+      t.select(); document.execCommand('copy'); t.remove();
+    } catch (e) {}
+  }
+  document.getElementById('dl').addEventListener('click', function () {
+    copy();
+    msg.textContent = '⬇️ ההורדה התחילה. אחרי ההתקנה חזור לכאן ולחץ על הכפתור הירוק';
+  });
+  var open = document.getElementById('open');
+  var back = location.origin + location.pathname + '?missing=1#' + code;
+  open.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
+  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ האפליקציה עוד לא מותקנת. קודם שלב 1, ואז שוב הכפתור הירוק';
+  open.addEventListener('click', function () {
+    copy();
+    msg.textContent = 'אם האפליקציה לא נפתחה, פתח את "ביחד" בעצמך. ההזמנה תיקלט לבד';
+  });
+})();
+</script>
+</body>
+</html>
