@@ -50,6 +50,7 @@ ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
   <p class="mu" style="text-align:center">🔐 המיקום מוצפן מקצה לקצה. רק מי שקיבל את הקישור הזה רואה אתכם.<br>כשהשיתוף פעיל יש התראה קבועה בטלפון, ואפשר להשהות בכל רגע.</p>
 </main>
 <script>
+window.addEventListener('hashchange', function () { location.reload(); });
 (function () {
   var m = /BYAHAD-[A-Za-z0-9_-]+/.exec(decodeURIComponent(location.hash || ''));
   var code = m ? m[0] : '';
@@ -61,7 +62,8 @@ ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
   }
   document.getElementById('sub').textContent = 'קיבלת הזמנה! שני צעדים ואתם מחוברים';
   function copy() {
-    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
+    try { if (navigator.clipboard) navigator.clipboard.writeText(code).catchwindow.addEventListener('hashchange', function () { location.reload(); });
+(function () {}); } catch (e) {}
     try {
       var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t);
       t.select(); document.execCommand('copy'); t.remove();
@@ -74,7 +76,7 @@ ul{margin:10px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
   var open = document.getElementById('open');
   var back = location.origin + location.pathname + '?missing=1#' + code;
   open.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
-  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ האפליקציה עוד לא מותקנת. קודם שלב 1, ואז שוב הכפתור הירוק';
+  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ לא הצלחתי לפתוח את האפליקציה. אם עוד לא התקנת: קודם שלב 1. אם כבר התקנת: פשוט פתח את "ביחד" מהמסך הראשי, ההזמנה כבר הועתקה ותיקלט לבד';
   open.addEventListener('click', function () {
     copy();
     msg.textContent = 'אם האפליקציה לא נפתחה, פתח את "ביחד" בעצמך. ההזמנה תיקלט לבד';
