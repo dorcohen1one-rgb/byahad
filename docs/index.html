@@ -36,7 +36,7 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:15px}
 <main>
   <div class="hero"><div class="logo">📍</div><h1>ביחד</h1><p id="sub">רואים אחד את השני על המפה, בזמן אמת</p></div>
 
-  <p class="mu skip" id="skip"><a href="#" id="skipA">כבר מותקן אצלך? ישר לשלב 2 ⬇️</a></p>
+  <p class="mu skip" id="skip"><a href="#" id="skipA">כבר יש לך את "ביחד"? ישר לשלב 2 ⬇️</a></p>
 
   <div class="card">
     <h2><span class="n">1</span>מורידים ומתקינים</h2>
@@ -56,7 +56,7 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:15px}
   <div class="card" id="step2">
     <h2><span class="n">2</span>פותחים ומתחברים</h2>
     <a class="btn ok" id="open" href="#">✅ פתיחת ביחד והתחברות</a>
-    <p class="mu" style="margin:10px 0 0">באפליקציה: שם, אישור מיקום והתראות, וזהו. ההזמנה כבר בפנים.</p>
+    <p class="mu" style="margin:10px 0 0">באפליקציה: שם, אישור מיקום והתראות, וזהו. ההזמנה כבר בפנים.<br>כבר משתפים עם מישהו אחר? האפליקציה תשאל אם לעבור לשיתוף החדש.</p>
   </div>
 
   <p class="done" id="msg"></p>
@@ -115,7 +115,7 @@ function showInviter(code) {
   var open = document.getElementById('open');
   var back = location.origin + location.pathname + '?missing=1#' + code;
   open.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
-  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ האפליקציה לא נפתחה. אם עוד לא הותקנה: קודם שלב 1. אם כבר מותקנת: פותחים את "ביחד" מהמסך הראשי' + (copy() ? ', וההזמנה תיקלט לבד' : ' ומדביקים שם את הקישור הזה');
+  if (/missing=1/.test(location.search)) msg.textContent = '⚠️ האפליקציה לא נפתחה. כנראה היא לא מותקנת או שמותקנת גרסה ישנה: מורידים ומתקינים בשלב 1 (זה גם מעדכן), ואז שוב הכפתור הירוק' + (copy() ? '. ההזמנה גם הועתקה, ו"ביחד" יקלוט אותה כשייפתח' : '');
   open.addEventListener('click', function () {
     var ok = copy();
     msg.textContent = ok ? '✅ ההזמנה הועתקה. אם האפליקציה לא נפתחה, פותחים את "ביחד" והיא תיקלט לבד' : 'אם האפליקציה לא נפתחה: פותחים את "ביחד" ומדביקים שם את הקישור הזה';
