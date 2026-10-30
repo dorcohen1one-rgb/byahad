@@ -17,7 +17,6 @@ main{max-width:460px;margin:0 auto;padding:28px 16px 40px}
 .hero{text-align:center;margin-bottom:18px}.logo{font-size:56px}h1{margin:4px 0 2px;font-size:30px}
 .hero p{margin:0;color:var(--mu)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px;margin:14px 0}
-.n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;margin-left:8px}
 h2{font-size:18px;margin:0 0 10px;display:flex;align-items:center}
 .btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font:700 18px system-ui,sans-serif;background:var(--ac);color:#fff;text-align:center;text-decoration:none;cursor:pointer}
 .btn.ok{background:#08783e}
@@ -26,9 +25,6 @@ ul{margin:8px 0 0;padding-inline-start:20px;color:var(--mu);font-size:14px}
 li{margin-bottom:6px}
 details{margin-top:12px;border-top:1px solid var(--bd);padding-top:10px}
 summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:15px}
-.skip{text-align:center;margin:0}.skip a{color:var(--ac);font-weight:600;text-decoration:none}
-#step2.flash{animation:fl 1.2s}@keyframes fl{0%,60%{box-shadow:0 0 0 4px var(--ok)}}
-.done{color:var(--ok);font-weight:700;text-align:center;margin-top:8px;min-height:1.5em}
 .hidden{display:none}
 </style>
 </head>
@@ -36,30 +32,22 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:15px}
 <main>
   <div class="hero"><div class="logo">📍</div><h1>ביחד</h1><p id="sub">רואים אחד את השני על המפה, בזמן אמת</p></div>
 
-  <p class="mu skip" id="skip"><a href="#" id="skipA">כבר יש לך את "ביחד"? לפתוח ⬅️</a></p>
+  <a class="btn ok" id="go" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">📲 להתחבר</a>
 
-  <div class="card">
-    <h2><span class="n">1</span>מורידים ומתקינים</h2>
-    <a class="btn" id="dl" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">⬇️ הורדת האפליקציה</a>
-    <p class="mu" style="margin:10px 0 0">פותחים את הקובץ ← <b>התקנה</b> ← <b>פתיחה</b></p>
+  <div class="card hidden" id="how" role="status" aria-live="polite">
+    <h2>⬇️ האפליקציה יורדת</h2>
+    <p style="margin:0">כשההורדה מסתיימת: פותחים את הקובץ ← <b>התקנה</b> ← <b>פתיחה</b>.<span id="inv"><br>ההזמנה כבר בפנים.</span></p>
     <details>
-      <summary>ההתקנה נתקעה?</summary>
+      <summary>משהו נתקע?</summary>
       <ul>
-        <li>כתוב שהקובץ עלול להזיק? זו אפליקציה פרטית שלא נמצאת בחנות. לוחצים <b>הורדה בכל זאת</b></li>
-        <li>שואל על התקנה ממקור לא מוכר? <b>הגדרות</b> ← לאשר את הדפדפן ← חוזרים אחורה ← <b>התקנה</b></li>
-        <li>לא מוצאים את הקובץ? אפליקציית <b>הקבצים שלי</b> ← <b>הורדות</b> ← Together.apk</li>
-        <li>בסמסונג ההתקנה חסומה? הגדרות ← אבטחה ופרטיות ← <b>Auto Blocker</b> ← לכבות, להתקין, ואפשר להדליק שוב אחרי</li>
+        <li><a id="dl" href="https://github.com/dorcohen1one-rgb/byahad/releases/latest/download/Together.apk">ההורדה לא התחילה? להוריד שוב</a></li>
+        <li>כתוב שהקובץ עלול להזיק? לוחצים <b>הורדה בכל זאת</b> (האפליקציה פשוט לא מהחנות)</li>
+        <li>שואל על מקור לא מוכר? <b>הגדרות</b> ← לאשר ← חוזרים ← <b>התקנה</b></li>
+        <li>בסמסונג חסום? הגדרות ← אבטחה ופרטיות ← <b>Auto Blocker</b> ← לכבות בזמן ההתקנה</li>
       </ul>
     </details>
   </div>
 
-  <div class="card" id="step2">
-    <h2><span class="n">2</span>פותחים ומתחברים</h2>
-    <a class="btn ok" id="open" href="#">✅ פתיחת ביחד</a>
-    <p class="mu" style="margin:10px 0 0">שם וכמה אישורים, וזהו. ההזמנה כבר בפנים.</p>
-  </div>
-
-  <p class="done" id="msg" role="status" aria-live="polite"></p>
   <p class="mu" style="text-align:center">🔐 רק מי שבשיתוף רואה את המיקום. אפשר לעצור בכל רגע.</p>
 </main>
 <script>
@@ -82,23 +70,23 @@ function showInviter(code) {
     }).then(function (ps) {
       var names = ps.filter(function (p) { return p && p.n; }).map(function (p) { return (p.em || '') + ' ' + p.n; });
       if (!names.length) return;
-      document.getElementById('sub').textContent = '📨 הזמנה מ' + names.join(' ו') + '! שני צעדים ואתם מחוברים';
+      document.getElementById('sub').textContent = '📨 הזמנה מ' + names.join(' ו') + '! לחיצה אחת ואתם מחוברים';
     }).catch(function () {});
   } catch (e) {}
 }
 (function () {
   var m = /BYAHAD-[A-Za-z0-9_-]+/.exec(decodeURIComponent(location.hash || ''));
   var code = m ? m[0] : '';
-  var msg = document.getElementById('msg');
-  if (!code) {
-    document.getElementById('step2').classList.add('hidden');
-    document.getElementById('skip').classList.add('hidden');
-    document.getElementById('sub').textContent = 'אחרי ההתקנה, פותחים שוב את קישור ההזמנה שקיבלת';
-    return;
-  }
-  document.getElementById('sub').textContent = 'קיבלת הזמנה! שני צעדים ואתם מחוברים';
+  var go = document.getElementById('go'), how = document.getElementById('how');
+  var apk = go.href;
+  go.addEventListener('click', function () { if (code) copy(); setTimeout(function () { if (!document.hidden) how.classList.remove('hidden'); }, 1500); });
+  document.getElementById('dl').addEventListener('click', function () { if (code) copy(); });
+  if (!code) { document.getElementById('sub').textContent = 'אחרי ההתקנה, פותחים שוב את ההזמנה שקיבלת'; go.textContent = '⬇️ הורדת האפליקציה'; document.getElementById('inv').remove(); return; }
+  document.getElementById('sub').textContent = 'קיבלת הזמנה! לחיצה אחת ואתם מחוברים';
   showInviter(code);
-  // the app picks the invite up from the clipboard if the direct hand-off fails; returns whether that worked
+  // installed: opens straight into the share; not installed: the browser falls back to downloading the app
+  go.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(apk) + ';end';
+  // the app picks the invite up from the clipboard when it is opened after installing
   function copy() {
     var ok = false;
     try {
@@ -108,22 +96,6 @@ function showInviter(code) {
     try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
     return ok;
   }
-  document.getElementById('dl').addEventListener('click', function () {
-    copy();
-    msg.textContent = '⬇️ ההורדה נפתחת. אחרי ההתקנה פותחים את ביחד, וההזמנה כבר שם';
-  });
-  var open = document.getElementById('open');
-  var back = location.origin + location.pathname + '?missing=1#' + code;
-  open.href = 'intent://join/' + code + '#Intent;scheme=byahad;package=il.dor.together;S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
-  if (/missing=1/.test(location.search)) msg.textContent = (copy(), '⚠️ ביחד לא נפתחה. מתקינים בשלב 1 ואז פותחים אותה');
-  open.addEventListener('click', function () {
-    var ok = copy();
-    msg.textContent = ok ? 'אם ביחד לא נפתחה, פותחים אותה מהטלפון וההזמנה תיקלט לבד' : '';
-  });
-  document.getElementById('skipA').addEventListener('click', function (e) {
-    e.preventDefault(); // installed already: open it right away
-    open.click();
-  });
 })();
 </script>
 </body>
